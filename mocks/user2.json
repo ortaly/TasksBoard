@@ -1,0 +1,9 @@
+{
+    "id": 2,
+    "name": "Dany Cohen",
+    "email": "dany@d.com",
+    "boards": [
+        "b1"
+    ] ,
+    "avatar": ""
+}

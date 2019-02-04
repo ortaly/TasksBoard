@@ -1,0 +1,9 @@
+{
+    "id": 1,
+    "name": "Ortal Yedgar",
+    "email": "ortal@tikalk.com",
+    "boards": [
+        "b1", "b2"
+    ],
+    "avatar": ""
+}
