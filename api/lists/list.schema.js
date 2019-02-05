@@ -11,10 +11,8 @@ const listSchema = Schema({
     }
 );
 
-listSchema.statics.getListsByBoardId = function(boardId) {
-    return this.find({"boardId" : boardId});
-}
+const ListsSchema = mongoose.model('List', listSchema);
 
 module.exports = {
-    listSchema
+    ListsSchema
 };

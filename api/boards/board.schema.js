@@ -13,10 +13,8 @@ const boardSchema = Schema({
     }  
 );
 
-boardSchema.statics.getBoard = function(boardId){
-    return this.findById(boardId);
-}
+const BoardsSchema = mongoose.model('Board', boardSchema);
 
 module.exports = {
-    boardSchema
+    BoardsSchema
 };

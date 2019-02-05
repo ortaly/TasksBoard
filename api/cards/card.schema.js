@@ -14,10 +14,10 @@ const cardSchema = Schema({
     }
 );
 
-cardSchema.statics.getCardsByListId = function(listId){
-    return this.find({"list" : listId});
-}
+const CardsSchema = mongoose.model('Card', cardSchema);
+
+
 
 module.exports = {
-    cardSchema,
+    CardsSchema,
 };

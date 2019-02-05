@@ -15,11 +15,9 @@ const userSchema = Schema({
     }    
 );
 
-userSchema.statics.authUser = function(email, pass){
-    return this.find({"email": email, "pass": pass});
-}
+const UsersSchema = mongoose.model('User', userSchema);
 
 module.exports = {
-    userSchema,
+    UsersSchema,
 };
 
