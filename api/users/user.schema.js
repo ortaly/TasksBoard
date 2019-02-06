@@ -3,12 +3,11 @@ const { Schema } = mongoose;
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const userSchema = Schema({
-        _id: {type: ObjectId, require: true},
-        name: {type: String, require: true},
-        email: {type: String, require: true},
-        boards: [{type: ObjectId, require: true}],
+        name: {type: String, required: true},
+        email: {type: String, required: true, unique: true},
+        boards: [{type: ObjectId}],
         avatar: String,
-        pass: {type: String, require: true}
+        pass: {type: String, required: true}
     },
     {
         collection: "tasks.users"

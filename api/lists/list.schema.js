@@ -3,9 +3,8 @@ const { Schema } = mongoose;
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const listSchema = Schema({
-        _id: {type: ObjectId, require: true},
-        title: {type: String, require: true},
-        boardId: [{type: ObjectId, require: true}],
+        title: {type: String, required: true},
+        boardId: {type: ObjectId, required: true},
     },{
         collection: "tasks.lists"
     }

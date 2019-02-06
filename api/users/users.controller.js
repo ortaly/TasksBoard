@@ -1,10 +1,9 @@
 // const mongoose = require('mongoose');
 const { UsersSchema } = require('./user.schema');
 
-const getUser = function(req, res) {
+const login = (req, res) => {
     const user = req.body;
-    console.log(JSON.stringify(user));
-    UsersSchema.findOne({"email" : user.email, "pass" : user.pass}, function(err, user){
+    UsersSchema.findOne({"email" : user.email, "pass" : user.pass}, (err, user) => {
         if(err) {
             res.send(err);
         }
@@ -13,7 +12,19 @@ const getUser = function(req, res) {
     })
 };
 
+const createUser = (req, res) => {
+    const user = req.body;
+    UsersSchema.create(user, (err, user) => {
+        if(err) {
+            res.send(err);
+        }
+        res.json(user);
+        console.log(" New user: " + JSON.stringify(user));
+    })
+}
+
 module.exports = {
-    getUser
+    login, 
+    createUser
 }
 

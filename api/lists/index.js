@@ -1,11 +1,17 @@
 const { Router } = require('express');
 
-const { getListsByBoardId } = require('./lists.controller');
+const { getLists, createList, renameList, deleteList } = require('./lists.controller');
 const router = new Router();
 
 router
   .route('/:boardId')
-  .get(getListsByBoardId);
+  .get(getLists)
+  .post(createList);
+
+router
+    .route('/:listId')
+    .put(renameList)
+    .delete(deleteList);
 
 
 module.exports = router;

@@ -5,7 +5,7 @@ const lists = require('./lists');
 const cards = require('./cards');
 const router = new Router();
 
-router.use('/login', users);
+router.use('/user', users);
 router.use('/board', boards);
 router.use('/list', lists);
 router.use('/card', cards);
