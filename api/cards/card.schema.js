@@ -15,8 +15,6 @@ const cardSchema = Schema({
 
 const CardsSchema = mongoose.model('Card', cardSchema);
 
-
-
 module.exports = {
     CardsSchema,
 };

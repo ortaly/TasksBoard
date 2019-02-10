@@ -1,17 +1,20 @@
 const { Router } = require('express');
-
-const { getLists, createList, renameList, deleteList } = require('./lists.controller');
+const schema = require('./lists.joi.schema');
+const { celebrate } = require('celebrate');
+const { createList, renameList, deleteList, getCards } = require('./lists.controller');
 const router = new Router();
 
 router
   .route('/')
-  .get(getLists)
-  .post(createList);
+  .post(celebrate(schema.createList), createList);
 
 router
     .route('/:listId')
-    .put(renameList)
-    .delete(deleteList);
+    .put(celebrate(schema.renameList), renameList)
+    .delete(celebrate(schema.deleteList), deleteList);
 
+router
+    .route('/:listId/cards')
+    .get(celebrate(schema.getCards), getCards)
 
 module.exports = router;

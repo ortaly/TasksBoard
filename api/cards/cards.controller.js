@@ -1,16 +1,5 @@
 const { CardsSchema } = require('./card.schema');
 
-const getCards = (req, res) => {
-    const { listId } = req.body;
-    return CardsSchema.find({"list" : listId}, (err, cards) => {
-        if(err) {
-            res.send(err);
-        }
-        res.json(cards);
-        console.log("cards: " + JSON.stringify(cards));
-    });
-}
-
 const createCard = (req, res) => {
     const newCard = req.body;
 
@@ -27,14 +16,12 @@ const createCard = (req, res) => {
 const updateCard = (req, res) => {
     const { cardId } = req.params;
     const cardPropsToUpdate = req.body;
-    // boardToUpdate.upsert = true;
     return CardsSchema.update({_id: cardId}, {$set : cardPropsToUpdate}, (err, card) => { 
         if(err) {
             res.send(err);
         }
         res.json(card);
         console.log("card updated: " + JSON.stringify(card));
-
     });
 }
 
@@ -46,12 +33,10 @@ const deleteCard = (req, res) => {
         }
         res.json(del);
         console.log("card deleted: " + JSON.stringify(del));
-
     });
 }
 
 module.exports = {
-    getCards,
     createCard,
     updateCard,
     deleteCard

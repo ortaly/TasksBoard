@@ -1,4 +1,3 @@
-// const mongoose = require('mongoose');
 const { UsersSchema } = require('./user.schema');
 
 const login = (req, res) => {

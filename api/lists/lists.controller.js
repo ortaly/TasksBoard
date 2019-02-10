@@ -1,19 +1,8 @@
 const { ListsSchema } = require('./list.schema');
-
-const getLists = (req, res) => {
-    const { boardId } = req.body;
-    return ListsSchema.find({"boardId" : boardId}, (err, lists) => {
-        if(err) {
-            res.send(err);
-        }
-        res.json(lists);
-        console.log("lists: " + JSON.stringify(lists));
-    });
-}
+const { CardsSchema } = require('../cards/card.schema');
 
 const createList = (req, res) => {
     const newList = req.body;
-
     return ListsSchema.create({...newList}, (err, list) => {
         if(err) {
             res.send(err);
@@ -43,14 +32,25 @@ const deleteList = (req, res) => {
             res.send(err);
         }
         res.json(del);
-        console.log("list deleted: " + JSON.stringify(del));
+        console.log("num of lists deleted: " + JSON.stringify(del.n));
 
     });
 }
 
+const getCards = (req, res) => {
+    const { listId } = req.params;
+    return CardsSchema.find({"listId" : listId}, (err, cards) => {
+        if(err) {
+            res.send(err);
+        }
+        res.json(cards);
+        console.log("cards: " + JSON.stringify(cards));
+    });
+}
+
 module.exports = {
-    getLists,
     createList,
     renameList,
-    deleteList
+    deleteList,
+    getCards
 }

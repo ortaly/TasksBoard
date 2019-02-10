@@ -1,4 +1,6 @@
 const { BoardsSchema } = require('./board.schema');
+const { ListsSchema } = require('../lists/list.schema');
+
 
 const getBoard = (req, res) => {
     const boardId = req.params.boardId;
@@ -11,10 +13,10 @@ const getBoard = (req, res) => {
     });
 }
 
+//create board with current user id as member. add member in deferent rest call
 const createBoard = (req, res) => {
-    const {board, userId} = req.body;
-    const members = board.members && board.members.isArray() ? members.push(userId) : [userId] 
-    return BoardsSchema.create({"name": board.name, "members" : members}, (err, board) => {
+    const {name, userId} = req.body;
+    return BoardsSchema.create({"name" : name, "members" : [userId]}, (err, board) => {
         if(err) {
             res.send(err);
         }
@@ -23,18 +25,16 @@ const createBoard = (req, res) => {
     });
 }
 
-//members array override (should get the members and merge first)
+//for add new member - get members, merge the array and only then update the board with new array
 const updateBoard = (req, res) => {
     const boardId = req.params.boardId;
     const boardPropsToUpdate = req.body;
-    // boardToUpdate.upsert = true;
     return BoardsSchema.update({_id: boardId}, {$set : boardPropsToUpdate}, (err, board) => { 
         if(err) {
             res.send(err);
         }
         res.json(board);
         console.log("board updated: " + JSON.stringify(board));
-
     });
 }
 
@@ -45,8 +45,19 @@ const deleteBoard = (req, res) => {
             res.send(err);
         }
         res.json(del);
-        console.log("board deleted: " + JSON.stringify(del));
+        console.log("num of boards deleted: " + JSON.stringify(del.n));
+    });
+}
 
+
+const getLists = (req, res) => {
+    const boardId = req.params;
+    return ListsSchema.find(boardId, (err, lists) => {
+        if(err) {
+            res.send(err);
+        }
+        res.json(lists);
+        console.log("lists: " + JSON.stringify(lists));
     });
 }
 
@@ -54,6 +65,7 @@ module.exports = {
     getBoard,
     createBoard,
     updateBoard,
-    deleteBoard
+    deleteBoard,
+    getLists
 }
 

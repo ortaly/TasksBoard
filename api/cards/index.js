@@ -1,17 +1,16 @@
 const { Router } = require('express');
-
-const { getCards, createCard, updateCard, deleteCard } = require('./cards.controller');
+const schema = require('./cards.joi.schema');
+const { celebrate } = require('celebrate');
+const { createCard, updateCard, deleteCard } = require('./cards.controller');
 const router = new Router();
 
 router
     .route('/')
-    .get(getCards)
-    .post(createCard);
+    .post(celebrate(schema.createCard), createCard);
 
 router
     .route('/:cardId')
-    .put(updateCard)
-    .delete(deleteCard)
-
+    .put(celebrate(schema.updateCard), updateCard)
+    .delete(celebrate(schema.deleteCard), deleteCard);
 
 module.exports = router;
