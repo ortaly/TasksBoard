@@ -4,7 +4,7 @@ const { getLists, createList, renameList, deleteList } = require('./lists.contro
 const router = new Router();
 
 router
-  .route('/:boardId')
+  .route('/')
   .get(getLists)
   .post(createList);
 

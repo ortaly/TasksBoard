@@ -4,7 +4,7 @@ const { getCards, createCard, updateCard, deleteCard } = require('./cards.contro
 const router = new Router();
 
 router
-    .route('/:listId')
+    .route('/')
     .get(getCards)
     .post(createCard);
 

@@ -1,7 +1,7 @@
 const { CardsSchema } = require('./card.schema');
 
 const getCards = (req, res) => {
-    const listId = req.params.listId;
+    const { listId } = req.body;
     return CardsSchema.find({"list" : listId}, (err, cards) => {
         if(err) {
             res.send(err);
@@ -12,10 +12,9 @@ const getCards = (req, res) => {
 }
 
 const createCard = (req, res) => {
-    const { listId } = req.params;
     const newCard = req.body;
 
-    return CardsSchema.create({...newCard, "list" : listId}, (err, card) => {
+    return CardsSchema.create({...newCard}, (err, card) => {
         if(err) {
             res.send(err);
         }

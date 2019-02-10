@@ -6,7 +6,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const cardSchema = Schema({
         title: {type: String, required: true},
         dueDate: Date,
-        list: {type: ObjectId, required: true},
+        listId: {type: ObjectId, required: true},
         members: [{type: ObjectId}] //array of user id
     },{
         collection: "tasks.cards"    

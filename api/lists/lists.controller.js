@@ -1,7 +1,7 @@
 const { ListsSchema } = require('./list.schema');
 
 const getLists = (req, res) => {
-    const boardId = req.params.boardId;
+    const { boardId } = req.body;
     return ListsSchema.find({"boardId" : boardId}, (err, lists) => {
         if(err) {
             res.send(err);
@@ -12,10 +12,9 @@ const getLists = (req, res) => {
 }
 
 const createList = (req, res) => {
-    const { boardId } = req.params;
     const newList = req.body;
 
-    return ListsSchema.create({...newList, "boardId" : boardId}, (err, list) => {
+    return ListsSchema.create({...newList}, (err, list) => {
         if(err) {
             res.send(err);
         }
