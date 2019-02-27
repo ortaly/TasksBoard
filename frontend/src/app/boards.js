@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { compose } from 'recompose';
 import { withStyles } from '@material-ui/core/styles';
 import Styles from '../assets/override-styles';
+import userService from '../services/user';
 
 
 class Boards extends Component {
@@ -31,9 +32,7 @@ class Boards extends Component {
 
     async componentDidMount(){
         if (this.props.user && this.props.user.id){
-            const token = localStorage.getItem('userToken');
-            const response = await axios.get(`http://localhost:3000/user/boards`, { headers: {"x-access-token" : `${token}`}});
-            const boards = response.data;
+            const boards = await userService.getBoards();
             await this.props.setBoards(boards);
             this.setState({boards: boards});
             console.log("boards: " + JSON.stringify(boards));

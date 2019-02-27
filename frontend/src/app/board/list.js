@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import Styled from '../../assets/styled-components';
+import axios from 'axios';
+import listServices from '../../services/list';
 
 class List extends Component{
+
+    constructor(props) {
+        super(props);
+
+        this.onBlur = this.onBlur.bind(this);
+    }
 
     onDragOver(ev) {
         ev.preventDefault();
@@ -13,11 +21,13 @@ class List extends Component{
         const origListId = ev.dataTransfer.getData("origListId");
         const destListId = this.props.id;
         this.props.moveCard(cardId, origListId, destListId);
-
-
-        // var data = ev.dataTransfer.getData("text");
-        // ev.target.appendChild(document.getElementById(data));
     }
+
+    onBlur(ev) {
+        const newName = ev.target.value;
+        const id = this.props.id;
+        listServices.updateList(id, {"title": newName});
+      }
 
     render() {
         return (
@@ -25,14 +35,12 @@ class List extends Component{
             onDragOver={(event => this.onDragOver(event))}>
                 <Styled.listContent >
                     <Styled.listHeader>
-                        <Styled.listHeaderName>
+                        <Styled.styledName onBlur={this.onBlur}>
                             {this.props.text}
-                        </Styled.listHeaderName>
+                        </Styled.styledName>
                     </Styled.listHeader>
-                    
                     { this.props.children }
                 </Styled.listContent>
-                
             </div>
         )
     }

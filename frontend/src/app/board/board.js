@@ -7,6 +7,9 @@ import  { Redirect } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import boardServices from '../../services/board';
+import listServices from '../../services/list';
+import cardServices from '../../services/card';
 
 
 class Board extends Component {
@@ -22,14 +25,10 @@ class Board extends Component {
 
     async componentDidMount(){
         if(!this.props.board) return;
-        const boardId = this.props.board._id;
-        const token = localStorage.getItem('userToken');
-        const response = await axios.get(`http://localhost:3000/board/${boardId}/lists`, { headers: {"x-access-token" : `${token}`}});
-        const lists = await Promise.all(response.data.map(async list => {
-            const listId = list._id;
-            const res = await axios.get(`http://localhost:3000/list/${listId}/cards`, { headers: {"x-access-token" : `${token}`}});
-            const cards = res.data;
-            console.log(`cards for ${listId}: ` + JSON.stringify(cards));
+        const listsData = await boardServices.getBoardLists(this.props.board._id);
+        const lists = await Promise.all(listsData.map(async list => {
+            const cards = await listServices.getListCards(list._id);
+            console.log(`cards for ${list._id}: ` + JSON.stringify(cards));
             return {...list, cards: cards};
         }));
         console.log("Lists: " + JSON.stringify(lists));
@@ -50,10 +49,8 @@ class Board extends Component {
         lists[destIndex].cards.push(card);
 
         this.setState({lists: lists});
-
-        const token = localStorage.getItem('userToken');
-        axios.put(`http://localhost:3000/card/${id}`, {"listId": destListId},
-            { headers: {"x-access-token" : `${token}`}});
+        cardServices.updateCard(id, {"listId": destListId});
+        
     }
 
     render() {

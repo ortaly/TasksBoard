@@ -45,7 +45,7 @@ const listHeader = styled.div`
     min-height: 20px;
 `;
 
-const listHeaderName = styled.textarea`
+const styledName = styled.textarea`
     background: transparent;
     border: 1px solid transparent;
     border-radius: 3px;
@@ -90,7 +90,7 @@ export default {
     listWrapper,
     listContent,
     listHeader,
-    listHeaderName,
+    styledName,
     cardsWrapper,
     cardContent,
 }

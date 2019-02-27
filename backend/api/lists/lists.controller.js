@@ -20,7 +20,6 @@ const renameList = (req, res) => {
         }
         res.json(list);
         console.log("list renamed updated: " + JSON.stringify(list));
-
     });
 }
 

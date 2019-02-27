@@ -11,11 +11,11 @@ const createList = {
 const renameList = {
     params: 
         Joi.object().keys({
-            title: Joi.string().required()
+            listId: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
         }),
     body:
         Joi.object().keys({
-            boardId: Joi.string().regex(/^[0-9a-fA-F]{24}$/).required()
+            title: Joi.string(),
         })
 }
 

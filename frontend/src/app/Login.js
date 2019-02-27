@@ -5,7 +5,7 @@ import { setUser } from '../actions/user.actions';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import axios from 'axios';
+import userService from '../services/user';
 import  { Redirect } from 'react-router-dom';
 
 
@@ -23,10 +23,10 @@ class Login extends Component {
     }
 
     async handleClick(event){
-        const response = await axios.post('http://localhost:3000/user/login', {"email": this.state.email, "password": this.state.password});
-        await this.props.setUser(response.data.user);
-        localStorage.setItem('userToken',  response.data.token);
-        console.log("Welcome " + response.data.user.name);
+        const data = await userService.login(this.state.email, this.state.password);
+        await this.props.setUser(data.user);
+        localStorage.setItem('userToken',  data.token);
+        console.log("Welcome " + data.user.name);
         this.setState({redirect : true});
     }
     
