@@ -1,5 +1,6 @@
 const permittedRoutes = [
-    '/user/login'
+    '/user/login',
+    '/user/create'
 ];
 
 //const permittedRoutes = 5;

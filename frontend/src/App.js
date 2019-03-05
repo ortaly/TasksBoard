@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Login from './app/Login';
 import Boards from './app/boards';
+import Register from './app/Register';
 import Board from './app/board/board';
 import HTML5Backend from 'react-dnd-html5-backend'
 import { DragDropContext } from 'react-dnd'
@@ -13,9 +14,10 @@ const App = ({ store }) => (
   <Provider store={store}>
     <Router>
       <div>
-        <Route path="/" component={Login} />
+        <Route path="/" exact={true} component={Login} />
         <Route path="/boards" component={Boards} /> 
-        <Route path="/board/:boardId" component={Board} /> 
+        <Route path="/register" component={Register} /> 
+        <Route path="/board/:boardId" component={Board} />
       </div>
     </Router>
   </Provider>

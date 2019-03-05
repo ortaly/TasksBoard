@@ -6,4 +6,4 @@ export const setBoards = boards => ({
 export const setSelectedBoard = board => ({
     type: 'SET_SELECTED_BOARD',
     board
-})
+});

@@ -2,7 +2,7 @@ const { ListsSchema, CardsSchema } = require('../../db/index');
 
 const createList = (req, res) => {
     const newList = req.body;
-    return ListsSchema.create({...newList}, (err, list) => {
+    return ListsSchema.create({...newList, "cards": []}, (err, list) => {
         if(err) {
             res.send(err);
         }

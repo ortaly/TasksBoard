@@ -5,6 +5,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const listSchema = Schema({
         title: {type: String, required: true},
         boardId: {type: ObjectId, required: true},
+        cards: {type: Array, required: true}
     },{
         collection: "tasks.lists"
     }

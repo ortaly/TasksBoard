@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Styled from '../../assets/styled-components';
-import axios from 'axios';
 import listServices from '../../services/list';
+import { addNewList } from '../../actions/list.actions';
 
 class List extends Component{
 
     constructor(props) {
         super(props);
-
-        this.onBlur = this.onBlur.bind(this);
+        this.renameOrCreateList = this.renameOrCreateList.bind(this);
     }
 
     onDragOver(ev) {
@@ -23,10 +23,20 @@ class List extends Component{
         this.props.moveCard(cardId, origListId, destListId);
     }
 
-    onBlur(ev) {
-        const newName = ev.target.value;
+    async renameOrCreateList(ev) {
+        const name = ev.target.value;
         const id = this.props.id;
-        listServices.updateList(id, {"title": newName});
+        if(id) {
+            listServices.updateList(id, {"title": name});
+            return;
+        }
+        const boardId = this.props.boardId;
+        if (boardId && name)  {
+            ev.target.value = "";
+            const list = await listServices.createList(boardId, name);
+            this.props.addNewList(list);
+            this.props.onBlurTextAction();
+        }
       }
 
     render() {
@@ -35,15 +45,16 @@ class List extends Component{
             onDragOver={(event => this.onDragOver(event))}>
                 <Styled.listContent >
                     <Styled.listHeader>
-                        <Styled.styledName onBlur={this.onBlur}>
+                        <Styled.styledName ref={this.props.focusRef} onBlur={this.renameOrCreateList} onFocus={this.props.onFocusTextAction}>
                             {this.props.text}
                         </Styled.styledName>
                     </Styled.listHeader>
                     { this.props.children }
+                    
                 </Styled.listContent>
             </div>
         )
     }
 }
 
-export default List;
+export default connect(null, { addNewList })(List);

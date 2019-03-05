@@ -16,28 +16,35 @@ const login = (req, res) => {
                });
             }
             if(result) {
-                const exp = moment().utc().add(TOKEN_EXPIRES_HOURS, 'hours').unix(); // expires in 2 hours
-                const JWTToken = jwt.sign({
-                    exp,
-                    email: user.email,
-                    _id: user._id
-                }, process.env.SUPER_SECRET);
-
-                return res.status(200).json({
-                    user: {
-                        name: user.name,
-                        email: user.email,
-                        id: user._id
-                    },
-                    token:JWTToken
+                createToken(user, res);
+            }
+            else {
+                res.status(401).json({
+                    failed: 'Unauthorized Access'
                 });
             }
-            return res.status(401).json({
-               failed: 'Unauthorized Access'
-            });
-         });
+        });
     })
 };
+
+const createToken = (user, res) => {
+    const exp = moment().utc().add(TOKEN_EXPIRES_HOURS, 'hours').unix(); // expires in 2 hours
+    const JWTToken = jwt.sign({
+        exp,
+        email: user.email,
+        _id: user._id
+    }, process.env.SUPER_SECRET);
+
+    return res.status(200).json({
+        user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            id: user._id
+        },
+        token:JWTToken
+    });
+}
 
 const createUser = (req, res) => {
     const user = req.body;
@@ -51,8 +58,10 @@ const createUser = (req, res) => {
             UsersSchema.create({...user, "password" : hashPass}, (err, user) => {
                 if(err) {
                     res.send(err);
+                    return;
                 }
-                res.json(user);
+                //res.json(user);
+                createToken(user, res);
                 console.log(" New user: " + JSON.stringify(user));
             })
         }

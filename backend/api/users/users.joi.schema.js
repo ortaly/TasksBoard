@@ -11,9 +11,9 @@ const login = {
 const createUser = {
     body: 
         Joi.object().keys({
-            name: Joi.string().alphanum().required(),
+            firstName: Joi.string().alphanum().required(),
+            lastName: Joi.string().alphanum().required(),
             email: Joi.string().email().required(),
-            boards: [Joi.string()],
             avatar: Joi.string(),
             password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required()
         })

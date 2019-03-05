@@ -60,7 +60,7 @@ const styledName = styled.textarea`
     max-height: 256px;
 `;
 
-const cardsWrapper = styled(Card)`
+const cardWrapper = styled(Card)`
     flex: 1 1 auto;
     margin-bottom: 0;
     overflow-y: auto;
@@ -91,6 +91,6 @@ export default {
     listContent,
     listHeader,
     styledName,
-    cardsWrapper,
+    cardWrapper,
     cardContent,
 }

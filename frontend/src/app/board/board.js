@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Styled from '../../assets/styled-components';
-// import Card from './card';
-import axios from 'axios';
 import  { Redirect } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,21 +8,33 @@ import Typography from '@material-ui/core/Typography';
 import boardServices from '../../services/board';
 import listServices from '../../services/list';
 import cardServices from '../../services/card';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import { setLists } from '../../actions/list.actions';
 
 
 class Board extends Component {
     constructor(props){
         super(props);
-
         this.state = {
-            lists: [],
+            listsObjects: [],
+            createListButtonDisabled: false,
+            createNewCard: false,
         }
-
+        this.createListRef = React.createRef();
         this.moveCard = this.moveCard.bind(this);
+        this.createList = this.createList.bind(this);
+        this.onFocusCreateList = this.onFocusCreateList.bind(this);
+        this.onBlurCreateList = this.onBlurCreateList.bind(this);
+        this.addNewCard = this.addNewCard.bind(this);
     }
 
-    async componentDidMount(){
+    async componentWillMount(){
         if(!this.props.board) return;
+        this.getBoardData();
+    }
+
+    async getBoardData() {
         const listsData = await boardServices.getBoardLists(this.props.board._id);
         const lists = await Promise.all(listsData.map(async list => {
             const cards = await listServices.getListCards(list._id);
@@ -32,12 +42,12 @@ class Board extends Component {
             return {...list, cards: cards};
         }));
         console.log("Lists: " + JSON.stringify(lists));
-        this.setState({lists: lists});
-        
+        this.setState({listsObjects: lists});
+        this.props.setLists(lists);
     }
 
     moveCard(id, origListId, destListId) {
-        const lists = this.state.lists;
+        const lists = this.state.listsObjects;
         const origIndex = lists.findIndex(list => list._id === origListId);
         const destIndex = lists.findIndex(list => list._id === destListId);
 
@@ -48,48 +58,86 @@ class Board extends Component {
         lists[origIndex].cards.splice(cardToMoveIndex, 1);
         lists[destIndex].cards.push(card);
 
-        this.setState({lists: lists});
+        this.setState({listsObjects: lists});
         cardServices.updateCard(id, {"listId": destListId});
         
     }
 
+    createList() {
+        this.createListRef.current.focus();
+    }
+
+    onFocusCreateList() {
+        this.setState({createListButtonDisabled: true});
+    }
+
+    onBlurCreateList() {
+        this.setState({createListButtonDisabled: false});
+        this.getBoardData();
+    }
+
+    async addNewCard(listId) {
+        const listsObjects = this.state.listsObjects;
+        const index = listsObjects.findIndex((list => list._id === listId));
+        const newCard = {
+            title: "",
+            listId,
+            isNew: true
+        }
+        listsObjects[index].cards.push(newCard);
+        this.setState({"listsObjects": listsObjects})
+    }
+
     render() {
         const {board} = this.props;
-
-            if (board && board.name) {
-                return (
-                    <Styled.boardWrapper>
-                        <br/>
-                        <AppBar position="static" color="default">
-                            <Toolbar>
-                                <Typography variant="h6" color="inherit">
-                                    Board {board.name} 
-                                </Typography>
-                            </Toolbar>
-                        </AppBar>
-                        <br/>
-                        {
-                            this.state.lists.map(list => {
-                                return <Styled.listWrapper text={list.title} id={list._id} moveCard={this.moveCard}>
-                                {
-                                    list.cards.map(card => {
-                                        return <Styled.cardsWrapper text={card.title} id={card._id} listId={list._id}></Styled.cardsWrapper>
-                                    })
-                                }
-                                </Styled.listWrapper>
-                            })
-                        }
-                    </Styled.boardWrapper>
-                )
-            }
-            return <Redirect to='/'/>;
+    
+        if (board && board.name) {
+            return (
+                <Styled.boardWrapper>
+                    <br/>
+                    <AppBar position="static" color="default">
+                        <Toolbar>
+                            <Typography variant="h6" color="inherit">
+                                Board {board.name} 
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    <br/>
+                    {
+                        this.props.lists.map(list => {
+                            return <Styled.listWrapper text={list.title} id={list._id} moveCard={this.moveCard}>
+                            {
+                                list.cards.map(card => {
+                                    return <Styled.cardWrapper text={card.title} id={card._id} listId={list._id} isNew={card.isNew}></Styled.cardWrapper>
+                                })
+                            }
+                            <Button size='medium' color="primary" onClick={() => this.addNewCard(list._id)}>
+                                <AddIcon />Add a card
+                            </Button>
+                            </Styled.listWrapper>
+                        })
+                    }
+                    <Styled.listWrapper focusRef={this.createListRef} boardId={board._id} 
+                    onFocusTextAction={this.onFocusCreateList} onBlurTextAction={this.onBlurCreateList}>
+                        <Button size="medium" color="primary" disabled={this.state.createListButtonDisabled} 
+                        onClick={this.createList}>
+                            <AddIcon />create New List
+                        </Button>
+                    </Styled.listWrapper>
+                </Styled.boardWrapper>
+            )
+        }
+        return <Redirect to='/'/>;
     }
 
 }
 
 const mapStateToprops = (state) => {
-    return { board: state.boards.selectedBoard };
+    return { 
+        board: state.boards.selectedBoard, 
+        lists: state.lists
+    };
 }
 
 
-export default connect(mapStateToprops)(Board);
+export default connect(mapStateToprops, { setLists })(Board);
