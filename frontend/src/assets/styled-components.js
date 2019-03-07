@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import List from '../app/board/list';
 import Card from '../app/board/card';
+import Button from '@material-ui/core/Button';
 
 const boardWrapper = styled.div`
     user-select: none;
@@ -84,6 +85,7 @@ const cardContent = styled.a`
     text-decoration: none;
     z-index: 0;
 `;
+
 
 export default {
     boardWrapper,

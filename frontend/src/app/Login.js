@@ -28,7 +28,7 @@ class Login extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    async handleClick(event){
+    handleClick= async () => {
         const data = await userService.login(this.state.email, this.state.password);
         await this.props.setUser(data.user);
         localStorage.setItem('userToken',  data.token);
@@ -40,7 +40,7 @@ class Login extends Component {
         this.setState({ [name]: event.target.value });
     };
 
-    register = event => {
+    register = () => {
         this.setState({redirectToRegister : true});
     }
     

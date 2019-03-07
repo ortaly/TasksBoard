@@ -22,19 +22,14 @@ class Board extends Component {
             createNewCard: false,
         }
         this.createListRef = React.createRef();
-        this.moveCard = this.moveCard.bind(this);
-        this.createList = this.createList.bind(this);
-        this.onFocusCreateList = this.onFocusCreateList.bind(this);
-        this.onBlurCreateList = this.onBlurCreateList.bind(this);
-        this.addNewCard = this.addNewCard.bind(this);
     }
 
-    async componentWillMount(){
+    componentWillMount = async() => {
         if(!this.props.board) return;
         this.getBoardData();
     }
 
-    async getBoardData() {
+    getBoardData = async() => {
         const listsData = await boardServices.getBoardLists(this.props.board._id);
         const lists = await Promise.all(listsData.map(async list => {
             const cards = await listServices.getListCards(list._id);
@@ -46,7 +41,7 @@ class Board extends Component {
         this.props.setLists(lists);
     }
 
-    moveCard(id, origListId, destListId) {
+    moveCard = (id, origListId, destListId) => {
         const lists = this.state.listsObjects;
         const origIndex = lists.findIndex(list => list._id === origListId);
         const destIndex = lists.findIndex(list => list._id === destListId);
@@ -63,35 +58,56 @@ class Board extends Component {
         
     }
 
-    createList() {
+    createList = () => {
         this.createListRef.current.focus();
     }
 
-    onFocusCreateList() {
+    onFocusCreateList = () => {
         this.setState({createListButtonDisabled: true});
     }
 
-    onBlurCreateList() {
+    onBlurCreateList = () => {
         this.setState({createListButtonDisabled: false});
         this.getBoardData();
     }
 
-    async addNewCard(listId) {
+    addNewCard = async(listId) => {
         const listsObjects = this.state.listsObjects;
         const index = listsObjects.findIndex((list => list._id === listId));
-        const newCard = {
-            title: "",
-            listId,
-            isNew: true
-        }
+        let newCard = await cardServices.addNewCard(listId,  "Card Title");
+        newCard.isNew = true;
         listsObjects[index].cards.push(newCard);
-        this.setState({"listsObjects": listsObjects})
+        this.setState({"listsObjects": listsObjects});
+    }
+
+    deleteCard = (cardId, listId) => {
+        //delete from db
+        cardServices.deleteCard(cardId);
+        //delete from state obj
+        const listsObjects = this.state.listsObjects;
+        const listIndex = listsObjects.findIndex((list => list._id === listId));
+        const cardIndex = listsObjects[listIndex].cards.findIndex(card => card._id === cardId);
+        if(cardIndex >= 0 ) {
+            listsObjects[listIndex].cards.splice(cardIndex, 1);
+        }
+        this.setState({"listsObjects": listsObjects});
+    }
+
+    deleteList = (listId) => {
+        //delete from db
+        listServices.deleteList(listId);
+        //delete from state obj
+        const listsObjects = this.state.listsObjects;
+        const listIndex = listsObjects.findIndex((list => list._id === listId));
+        if(listIndex >= 0 ) {
+            listsObjects.splice(listIndex, 1);
+        }
+        this.setState({"listsObjects": listsObjects});
     }
 
     render() {
-        const {board} = this.props;
-    
-        if (board && board.name) {
+        const { board } = this.props;
+        if ( board && board.name ) {
             return (
                 <Styled.boardWrapper>
                     <br/>
@@ -104,11 +120,12 @@ class Board extends Component {
                     </AppBar>
                     <br/>
                     {
-                        this.props.lists.map(list => {
-                            return <Styled.listWrapper text={list.title} id={list._id} moveCard={this.moveCard}>
+                        this.state.listsObjects.map((list,i) => {
+                            return <Styled.listWrapper key={list} text={list.title} id={list._id} moveCard={this.moveCard} deleteList={this.deleteList}>
                             {
                                 list.cards.map(card => {
-                                    return <Styled.cardWrapper text={card.title} id={card._id} listId={list._id} isNew={card.isNew}></Styled.cardWrapper>
+                                    return <Styled.cardWrapper key={card._id} text={card.title} id={card._id} listId={list._id} 
+                                    isNew={card.isNew} deleteCard={this.deleteCard}></Styled.cardWrapper>
                                 })
                             }
                             <Button size='medium' color="primary" onClick={() => this.addNewCard(list._id)}>
@@ -138,6 +155,5 @@ const mapStateToprops = (state) => {
         lists: state.lists
     };
 }
-
 
 export default connect(mapStateToprops, { setLists })(Board);

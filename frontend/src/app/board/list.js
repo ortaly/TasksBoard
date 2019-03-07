@@ -1,29 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Styled from '../../assets/styled-components';
+import { compose } from 'recompose';
+import Styles from '../../assets/override-styles';
+import { withStyles } from '@material-ui/core/styles';
 import listServices from '../../services/list';
+import Button from '@material-ui/core/Button';
 import { addNewList } from '../../actions/list.actions';
 
 class List extends Component{
-
     constructor(props) {
         super(props);
-        this.renameOrCreateList = this.renameOrCreateList.bind(this);
+        this.state = {
+            listTitle: props.text
+        }
     }
 
-    onDragOver(ev) {
+    onDragOver = (ev) => {
         ev.preventDefault();
     }
       
-    onDrop(ev) {
+    onDrop = (ev) => {
         ev.preventDefault();
         const cardId = ev.dataTransfer.getData("id");
         const origListId = ev.dataTransfer.getData("origListId");
         const destListId = this.props.id;
-        this.props.moveCard(cardId, origListId, destListId);
+        if(origListId && destListId) {
+            this.props.moveCard(cardId, origListId, destListId);
+        }
     }
 
-    async renameOrCreateList(ev) {
+    renameOrCreateList = async(ev) => {
         const name = ev.target.value;
         const id = this.props.id;
         if(id) {
@@ -37,7 +44,11 @@ class List extends Component{
             this.props.addNewList(list);
             this.props.onBlurTextAction();
         }
-      }
+    }
+
+    updateTitle = (ev) => {
+        this.setState({listTitle: ev.target.value});
+    }
 
     render() {
         return (
@@ -45,9 +56,9 @@ class List extends Component{
             onDragOver={(event => this.onDragOver(event))}>
                 <Styled.listContent >
                     <Styled.listHeader>
-                        <Styled.styledName ref={this.props.focusRef} onBlur={this.renameOrCreateList} onFocus={this.props.onFocusTextAction}>
-                            {this.props.text}
-                        </Styled.styledName>
+                        <Styled.styledName ref={this.props.focusRef} onBlur={this.renameOrCreateList} onFocus={this.props.onFocusTextAction}
+                            value={this.state.listTitle} onChange={this.updateTitle}/>
+                        <Button size="small" variant="outlined" color="primary" classes={{label: this.props.classes.smallButton}} onClick={() => this.props.deleteList(this.props.id)}>Delete</Button>
                     </Styled.listHeader>
                     { this.props.children }
                     
@@ -57,4 +68,7 @@ class List extends Component{
     }
 }
 
-export default connect(null, { addNewList })(List);
+export default compose(
+    withStyles(Styles),
+    connect(null, { addNewList })
+ )(List);

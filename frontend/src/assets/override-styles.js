@@ -5,6 +5,10 @@ const Styles = {
 
     formControl: {
         margin: '15px'
+    },
+
+    smallButton: {
+        fontSize: '10px'
     }
 
     

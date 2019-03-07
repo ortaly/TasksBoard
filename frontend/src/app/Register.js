@@ -27,16 +27,16 @@ class Register extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         ValidatorForm.addValidationRule('isPasswordMatch', (value) => {
             if (value !== this.state.password) {
                 return false;
             }
             return true;
         });
-    }
+    };
 
-    async handleSubmit(){
+    handleSubmit = async() => {
         const data = await userService.register(this.state.firstName, this.state.lastName, this.state.email, this.state.password);
         if (data && data.user){
             const { user } = data;
@@ -44,12 +44,12 @@ class Register extends Component {
             localStorage.setItem('userToken',  data.token);
             this.setState({redirectToBoards : true});
         }
-        
-    }
+    };
 
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
     };
+
     render() {
         if (this.state.redirectToBoards) {
             return <Redirect to='/boards'/>;

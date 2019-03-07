@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import  { Redirect } from 'react-router-dom';
 import { setBoards, setSelectedBoard } from '../actions/boards.actions';
@@ -30,12 +29,9 @@ class Boards extends Component {
             createNew: false,
             newBoardName: ''
         }
-
-        this.createNewBoard = this.createNewBoard.bind(this);
-        this.openCreateBoardSection = this.openCreateBoardSection.bind(this);
     }
 
-    async componentDidMount(){
+    componentDidMount = async () => {
         if (this.props.user && this.props.user.id){
             const boards = await userService.getBoards();
             await this.props.setBoards(boards);
@@ -48,11 +44,11 @@ class Boards extends Component {
         this.setState({ [name]: event.target.value });
     };
 
-    openCreateBoardSection() {
+    openCreateBoardSection = () => {
         this.setState({createNew: true});
     }
 
-    openBoard(event, boardId){
+    openBoard = (event, boardId) => {
         if(boardId){
             const board = this.state.boards.find(board => {
                 return board._id === boardId;
@@ -64,13 +60,11 @@ class Boards extends Component {
         }
     }
 
-    async createNewBoard(){
+    createNewBoard = async () => {
         const newBoard = await boardService.createNewBoard(this.props.user.id, this.state.newBoardName);
         let boards = this.state.boards;
         boards.push(newBoard);
-        this.setState({boards: boards});
-        this.setState({createNew: false});
-        this.setState({newBoardName: ''})
+        this.setState({boards: boards, createNew: false, newBoardName: ''});
     }
 
     render() {
@@ -96,7 +90,7 @@ class Boards extends Component {
                     </AppBar>
                     <br/>
                     {this.state.boards.map((board) => 
-                        <ListItem button onClick={event => this.openBoard(event, board._id)}>
+                        <ListItem button key={board._id} onClick={event => this.openBoard(event, board._id)}>
                             <Avatar>
                                 <DashboardIcon />
                             </Avatar>
