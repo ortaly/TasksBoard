@@ -3,8 +3,16 @@ const Styles = {
         color: 'white'
     },
 
+    loginControl: {
+        textAlign: 'center'
+    },
+
+    registerControl: {
+        textAlign: 'center'
+    },
+
     formControl: {
-        margin: '15px'
+        margin: '15px',
     },
 
     smallButton: {

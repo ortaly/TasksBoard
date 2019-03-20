@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { setUser } from '../actions/user.actions';
+import { setUser } from '../redux/feature/user/user.actions';
+import { userLogin } from '../redux/feature/auth/auth.actions';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -24,15 +25,12 @@ class Login extends Component {
             redirectToBoards: false,
             redirectToRegister: false
         }  
-        
-        this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick= async () => {
         const data = await userService.login(this.state.email, this.state.password);
-        await this.props.setUser(data.user);
-        localStorage.setItem('userToken',  data.token);
-        console.log("Welcome " + data.user.name);
+        this.props.setUser(data.user);
+        this.props.userLogin(data.token);
         this.setState({redirectToBoards : true});
     }
 
@@ -57,7 +55,7 @@ class Login extends Component {
         return (
             <div>
                 <MuiThemeProvider>
-                    <div>
+                    <div className={this.props.classes.loginControl}>
                         <AppBar position="static">
                             <Toolbar>
                                 <Typography variant="h6" color="inherit">
@@ -95,5 +93,5 @@ const style = {
 
 export default compose(
     withStyles(Styles),
-    connect(null, {setUser})
+    connect(null, {setUser, userLogin})
  )(Login);

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Styled from '../../assets/styled-components';
 import cardServices from '../../services/card';
+import { setCardTitle } from '../../redux/feature/lists/list.actions';
 
 class Card extends Component{
 
@@ -30,7 +32,9 @@ class Card extends Component{
     }
 
     updateTitle = (ev) => {
-      this.setState({cardTitle: ev.target.value});
+      const newName = ev.target.value
+      this.setState({cardTitle: newName});
+      this.props.setCardTitle(this.props.listId, this.props.id, newName);
   }
 
     render() {
@@ -45,4 +49,4 @@ class Card extends Component{
     }
 }
 
-export default Card;
+export default connect(null, { setCardTitle })(Card);

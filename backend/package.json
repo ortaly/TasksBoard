@@ -2,7 +2,7 @@
     "name": "task-board",
     "version": "1.0.0",
     "description": "Create board of tasks",
-    "main": "server.js",
+    "main": "app.js",
     "dependencies": {
         "bcrypt": "^3.0.4",
         "celebrate": "^9.0.2",
@@ -14,11 +14,14 @@
         "mongoose": "~5.4.7"
     },
     "devDependencies": {
-        "nodemon": "^1.18.9"
+        "babel-jest": "^24.3.1",
+        "jest": "^24.3.1",
+        "nodemon": "^1.18.9",
+        "supertest": "^4.0.0"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon server.js"
+        "test": "jest --watchAll",
+        "start": "nodemon app.js"
     },
     "author": "Ortal Yedgar",
     "license": "ISC"

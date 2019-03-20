@@ -11,7 +11,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Styles from '../assets/override-styles';
 import  { Redirect } from 'react-router-dom';
 import userService from '../services/user';
-import { setUser } from '../actions/user.actions';
+import { setUser } from '../redux/feature/user/user.actions';
+import { userLogin } from '../redux/feature/auth/auth.actions';
 
 class Register extends Component {
     constructor(props){
@@ -39,9 +40,8 @@ class Register extends Component {
     handleSubmit = async() => {
         const data = await userService.register(this.state.firstName, this.state.lastName, this.state.email, this.state.password);
         if (data && data.user){
-            const { user } = data;
-            await this.props.setUser(user);
-            localStorage.setItem('userToken',  data.token);
+            this.props.setUser(data.user);
+            this.props.userLogin(data.token);
             this.setState({redirectToBoards : true});
         }
     };
@@ -58,7 +58,7 @@ class Register extends Component {
         return (
             <div>
                 <MuiThemeProvider>
-                    <div>
+                    <div  className={this.props.classes.registerControl}>
                         <AppBar position="static">
                             <Toolbar>
                                 <Typography variant="h6" color="inherit">
@@ -100,5 +100,5 @@ class Register extends Component {
 
 export default compose(
     withStyles(Styles),
-    connect(null, {setUser})
+    connect(null, {setUser, userLogin})
  )(Register);

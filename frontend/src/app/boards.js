@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Redirect } from 'react-router-dom';
-import { setBoards, setSelectedBoard } from '../actions/boards.actions';
+import { setBoards, setSelectedBoard, createBoard, selectBoard } from '../redux/feature/boards/boards.actions';
+import { getBoards } from '../redux/feature/user/user.actions';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
@@ -14,57 +15,54 @@ import Typography from '@material-ui/core/Typography';
 import { compose } from 'recompose';
 import { withStyles } from '@material-ui/core/styles';
 import Styles from '../assets/override-styles';
-import userService from '../services/user';
 import boardService from '../services/board';
-import Collapse from '@material-ui/core/Collapse';
-import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 
 class Boards extends Component {
     constructor(props){
         super(props);
         this.state = {
-            boards: [],
             redirectToBoard: false,
-            createNew: false,
+            createNewDialog: false,
             newBoardName: ''
         }
     }
 
     componentDidMount = async () => {
-        if (this.props.user && this.props.user.id){
-            const boards = await userService.getBoards();
-            await this.props.setBoards(boards);
-            this.setState({boards: boards});
-            console.log("boards: " + JSON.stringify(boards));
-        }
+        this.props.getBoards();
     }
 
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
     };
 
-    openCreateBoardSection = () => {
-        this.setState({createNew: true});
+    openCreateBoardDialog = () => {
+        this.setState({createNewDialog: true});
     }
 
-    openBoard = (event, boardId) => {
+    handleClose = () => {
+        this.setState({createNewDialog: false, newBoardName: ''});
+    }
+
+    openBoard = async (event, boardId) => {
         if(boardId){
-            const board = this.state.boards.find(board => {
-                return board._id === boardId;
-            })
-            this.props.setSelectedBoard(board);
-            this.setState({redirectToBoard: board.name});
+            await this.props.selectBoard(boardId);
+            if(this.props.selectedBoard){
+                this.setState({redirectToBoard: this.props.selectedBoard.name});
+            }
         } else {
             console.log("ERROR: no boardId to open!")
         }
     }
 
     createNewBoard = async () => {
-        const newBoard = await boardService.createNewBoard(this.props.user.id, this.state.newBoardName);
-        let boards = this.state.boards;
-        boards.push(newBoard);
-        this.setState({boards: boards, createNew: false, newBoardName: ''});
+        this.props.createBoard(this.state.newBoardName);
+        this.handleClose();
     }
 
     render() {
@@ -73,10 +71,15 @@ class Boards extends Component {
         if (this.state.redirectToBoard) {
             return <Redirect to={`/board/${this.state.redirectToBoard}`}/>;
         }
+        const boardsList = this.props.boards ? (this.props.boards.map((board) => 
+                <ListItem button key={board._id} onClick={event => this.openBoard(event, board._id)}>
+                    <Avatar>
+                        <DashboardIcon />
+                    </Avatar>
+                    <ListItemText primary={board.name} classes={{ primary: this.props.classes.whiteName }}/>
+                </ListItem>
+            )) : null;
 
-        if (this.state.redirectToCreateNew) {
-            return <Redirect to='/createBoard'/>;
-        }  
         if (user && user.id) { 
             return (
                 <div>
@@ -84,34 +87,32 @@ class Boards extends Component {
                         <Toolbar>
                             <Typography variant="h6" color="inherit">
                                 {`${user.firstName} ${user.lastName}'s Boards: `}
-                                
                             </Typography>
                         </Toolbar>
                     </AppBar>
                     <br/>
-                    {this.state.boards.map((board) => 
-                        <ListItem button key={board._id} onClick={event => this.openBoard(event, board._id)}>
-                            <Avatar>
-                                <DashboardIcon />
-                            </Avatar>
-                            <ListItemText primary={board.name} classes={{ primary: this.props.classes.whiteName }}/>
-                        </ListItem>
-                    )}
-                    <Button variant="outlined" size="medium" color="primary" onClick={this.openCreateBoardSection}>
+                    <Button variant="outlined" size="medium" color="primary" onClick={this.openCreateBoardDialog}>
                         <AddIcon />create New Board
                     </Button>
+                    <br/>
+                    {boardsList}
                     <br/><br/>
-                    <Collapse in={this.state.createNew}>
-                        <div>
-                            <ValidatorForm onSubmit={(event) => this.createNewBoard(event)}>
-                                <TextValidator label="Board Name"
-                                    onChange={this.handleChange('newBoardName')} 
-                                    validators={['required']} errorMessages={['this field is required']} value={this.state.newBoardName}/>
-                                <br/><br/>
-                                <Button type="submit" variant="contained" color="primary">Create</Button>
-                            </ValidatorForm>
-                        </div>
-                    </Collapse>
+                    <Dialog
+                        open={this.state.createNewDialog} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                        <DialogTitle id="form-dialog-title">Create New Board</DialogTitle>
+                        <DialogContent>
+                            <TextField autoFocus margin="dense" id="name" label="Board Name" type="text" fullWidth 
+                            value={this.state.newBoardName} onChange={this.handleChange('newBoardName')} />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleClose} color="primary">
+                            Cancel
+                            </Button>
+                            <Button onClick={this.createNewBoard} color="primary">
+                            Create
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
             );
         }
@@ -120,12 +121,14 @@ class Boards extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return { user: state.user };
+    return { user: state.user, boards: state.boards.boardsList, selectedBoard: state.boards.selectedBoard };
 }
 
 export default compose(
     withStyles(Styles),
-    connect(mapStateToProps, {setBoards, setSelectedBoard})
+    connect(mapStateToProps, 
+        {setBoards, setSelectedBoard, 
+            createBoard, getBoards, selectBoard})
  )(Boards)
 
 
