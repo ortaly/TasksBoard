@@ -1,7 +1,7 @@
 import * as AT from '../../actionTypes';
 import cardServices from '../../../services/card';
 import listServices from '../../../services/list';
-import { setList } from './list.actions';
+import { setList, setListsObj, deleteCard } from './list.actions';
 
 const { LISTS } = AT;
 export const listsMiddleware = ({ dispatch, getState }) => (next) => async (action) => {
@@ -55,7 +55,6 @@ export const listsMiddleware = ({ dispatch, getState }) => (next) => async (acti
     break;
 
     case action.type.includes(`${LISTS} ${AT.ADD_NEW_LIST}`): {
-      console.log("middleware ADD_NEW_LIST");
       const list = await listServices.createList(action.payload.boardId, action.payload.name);
       dispatch(setList(list));
     }
@@ -70,6 +69,37 @@ export const listsMiddleware = ({ dispatch, getState }) => (next) => async (acti
         list.cards.push(newCard);
         dispatch(setList(list));
       }
+    }
+    break;
+
+    case action.type.includes(`${LISTS} ${AT.DELETE_CARD}`): {
+      const { cardId, listId} = action.payload;
+
+      
+      const lists = getState().lists;
+      const list = Object.assign({}, lists[listId]);
+      const listCardsArr = list.cards.slice();
+
+      const cardIndex = listCardsArr.findIndex(
+        card => card._id === cardId
+      );
+      if(cardIndex >= 0 ) {
+        listCardsArr.splice(cardIndex, 1);
+        list.cards = listCardsArr;
+        dispatch(setList(list));
+        cardServices.deleteCard(cardId);
+      }
+    }
+    break;
+
+    case action.type.includes(`${LISTS} ${AT.DELETE_LIST}`): {
+      const { listId } = action.payload;
+
+      const lists = getState().lists;
+      lists[listId].cards.map(card => dispatch(deleteCard(card._id, listId)));
+      delete lists[listId];
+      dispatch(setListsObj(lists));
+      listServices.deleteList(listId);      
     }
     break;
   }

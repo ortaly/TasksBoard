@@ -7,6 +7,11 @@ export const setUser = user => ({
     payload: { user }
 });
 
+export const createUser = user => ({
+    type: `${USERS} ${AT.CREATE_USER}`,
+    payload: { ...user }
+})
+
 export const getBoards = () => ({
     type: `${USERS} ${AT.GET_BOARDS}`
 })

@@ -10,8 +10,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Styles from '../assets/override-styles';
 import  { Redirect } from 'react-router-dom';
-import userService from '../services/user';
-import { setUser } from '../redux/feature/user/user.actions';
+import { createUser } from '../redux/feature/user/user.actions';
 import { userLogin } from '../redux/feature/auth/auth.actions';
 
 class Register extends Component {
@@ -23,7 +22,6 @@ class Register extends Component {
             email:'',
             password:'',
             repeatPassword: '',
-            redirectToBoards: false,
             PasswordErrorText: ''
         }
     }
@@ -38,12 +36,13 @@ class Register extends Component {
     };
 
     handleSubmit = async() => {
-        const data = await userService.register(this.state.firstName, this.state.lastName, this.state.email, this.state.password);
-        if (data && data.user){
-            this.props.setUser(data.user);
-            this.props.userLogin(data.token);
-            this.setState({redirectToBoards : true});
-        }
+        this.props.createUser({
+            firstName: this.state.firstName, 
+            lastName: this.state.lastName, 
+            email: this.state.email, 
+            password: this.state.password
+        });
+        
     };
 
     handleChange = name => event => {
@@ -51,10 +50,6 @@ class Register extends Component {
     };
 
     render() {
-        if (this.state.redirectToBoards) {
-            return <Redirect to='/boards'/>;
-        }
-
         return (
             <div>
                 <MuiThemeProvider>
@@ -97,8 +92,12 @@ class Register extends Component {
     }
 }
 
+const mapDispatchToProps = {
+    userLogin,
+    createUser
+};
 
 export default compose(
     withStyles(Styles),
-    connect(null, {setUser, userLogin})
+    connect(null, mapDispatchToProps)
  )(Register);

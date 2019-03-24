@@ -90,8 +90,13 @@ const style = {
     margin: 15,
 };
 
+const mapDispatchToProps = {
+    setUser, 
+    userLogin
+};
+
 
 export default compose(
     withStyles(Styles),
-    connect(null, {setUser, userLogin})
+    connect(null, mapDispatchToProps)
  )(Login);

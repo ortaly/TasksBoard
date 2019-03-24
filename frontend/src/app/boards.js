@@ -124,11 +124,17 @@ const mapStateToProps = (state) => {
     return { user: state.user, boards: state.boards.boardsList, selectedBoard: state.boards.selectedBoard };
 }
 
+const mapDispatchToProps = {
+    setBoards, 
+    setSelectedBoard, 
+    createBoard, 
+    getBoards, 
+    selectBoard
+}
+
 export default compose(
     withStyles(Styles),
-    connect(mapStateToProps, 
-        {setBoards, setSelectedBoard, 
-            createBoard, getBoards, selectBoard})
+    connect(mapStateToProps, mapDispatchToProps)
  )(Boards)
 
 

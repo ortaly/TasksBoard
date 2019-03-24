@@ -14,7 +14,7 @@ export const addNewList = (boardId, name) => ({
 
 export const moveCard = (cardId, origListId, destListId) => ({
     type: `${LISTS} ${AT.MOVE_CARD}`,
-    payload: { cardId, origListId, destListId}
+    payload: { cardId, origListId, destListId }
 });
 
 export const setList = list => ({
@@ -24,15 +24,30 @@ export const setList = list => ({
 
 export const setCardTitle = (listId, cardId, newName) => ({
     type : `${LISTS} ${AT.SET_CARD_NAME}`,
-    payload: {listId, cardId, newName}
+    payload: { listId, cardId, newName }
 });
 
 export const updateList = (listId, name) => ({
     type : `${LISTS} ${AT.UPDATE_LIST}`,
-    payload: {listId, name}
+    payload: { listId, name }
 });
 
 export const addNewCard =  (listId) => ({
     type : `${LISTS} ${AT.ADD_NEW_CARD}`,
     payload: { listId }
+});
+
+export const deleteCard = (cardId, listId) => ({
+    type : `${LISTS} ${AT.DELETE_CARD}`,
+    payload: { cardId, listId }
+});
+
+export const deleteList = (listId) => ({
+    type : `${LISTS} ${AT.DELETE_LIST}`,
+    payload: { listId }
+});
+
+export const setListsObj = listsObj => ({
+    type: `${LISTS} ${AT.SET_LISTS_OBJ}`,
+    payload: listsObj
 });

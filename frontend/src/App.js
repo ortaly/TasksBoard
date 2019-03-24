@@ -6,9 +6,10 @@ import Boards from './app/boards';
 import Register from './app/Register';
 import Board from './app/board/board';
 import './assets/style.css';
+import history from './history';
 
 const App = () => (
-    <Router>
+    <Router history={history}>
       <div>
         <Route path="/" exact={true} component={Login} />
         <Route path="/boards" component={Boards} /> 

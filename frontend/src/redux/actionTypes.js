@@ -6,6 +6,7 @@ export const LOGOUT_USER = 'LOGOUT_USER';
 // USERS
 export const USERS = '[USERS]';
 export const SET_USER = 'SET_USER';
+export const CREATE_USER = 'CREATE_USER';
 
 //BOARDS
 export const BOARDS = '[BOARDS]';
@@ -29,5 +30,8 @@ export const SET_LIST = 'SET_LIST';
 export const SET_CARD_NAME = 'SET_CARD_NAME';
 export const UPDATE_LIST = 'UPDATE_LIST';
 export const ADD_NEW_CARD = 'ADD_NEW_CARD';
+export const DELETE_CARD = 'DELETE_CARD';
+export const DELETE_LIST = 'DELETE_LIST';
+export const SET_LISTS_OBJ = 'SET_LISTS_OBJ';
 
 

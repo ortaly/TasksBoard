@@ -12,10 +12,11 @@ const lists = (lists = [], action) => {
             const listsObj = action.payload.reduce(reducer, {});
             return listsObj;
 
-        // case `${LISTS} ${AT.ADD_NEW_LIST}`:
         case `${LISTS} ${AT.SET_LIST}`:
-            console.log("reducer " + action.type);
-            return {...lists, [action.payload._id]: action.payload}
+            return {...lists, [action.payload._id]: action.payload};
+
+        case `${LISTS} ${AT.SET_LISTS_OBJ}`:
+            return {...action.payload};
         
         default: 
             return lists

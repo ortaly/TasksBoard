@@ -5,7 +5,7 @@ import { compose } from 'recompose';
 import Styles from '../../assets/override-styles';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { addNewList, updateList, moveCard, addNewCard } from '../../redux/feature/lists/list.actions';
+import { addNewList, updateList, moveCard, addNewCard, deleteList } from '../../redux/feature/lists/list.actions';
 import AddIcon from '@material-ui/icons/Add';
 
 
@@ -45,16 +45,15 @@ class List extends Component{
 
     renameOrCreateList = async(ev) => {
         const name = ev.target.value;
-        const listId = this.props.id;
+        const listId = this.props.list && this.props.list.id;
         if(listId) {
             this.props.updateList(listId, name);
             return;
         }
         const boardId = this.props.boardId;
         if (boardId && name)  {
-            ev.target.value = "";
             this.props.addNewList(boardId, name);
-            this.setState({createListButtonDisabled: false});
+            this.setState({createListButtonDisabled: false, listTitle: ''});
         }
     }
 
@@ -68,8 +67,8 @@ class List extends Component{
 
     render() {
         let addButton;
-        let { list } = this.props;
-        if(this.props.isNew){
+        let { list, isNew } = this.props;
+        if(isNew){
             addButton = <Button size="medium" color="primary" disabled={this.state.createListButtonDisabled} 
                         onClick={this.createList} >
                             <AddIcon />create New List
@@ -86,12 +85,16 @@ class List extends Component{
                     <Styled.listHeader>
                         <Styled.styledName ref={this.createListRef} onBlur={this.renameOrCreateList} onFocus={this.onFocusCreateList}
                             value={this.state.listTitle} onChange={this.updateTitle}/>
-                        <Button size="small" variant="outlined" color="primary" classes={{label: this.props.classes.smallButton}} onClick={() => this.props.deleteList(this.props.id)}>Delete</Button>
+                        {!isNew ?
+                            <Button size="small" variant="outlined" color="primary" classes={{label: this.props.classes.smallButton}} 
+                            onClick={() => this.props.deleteList(list._id)}>Delete</Button>:
+                            null
+                        }
                     </Styled.listHeader>
                     {
                         list && list.cards && list.cards.map(card => {
                             return <Styled.cardWrapper key={card._id} text={card.title} id={card._id} listId={list._id} 
-                                isNew={card.isNew} deleteCard={this.deleteCard}></Styled.cardWrapper>
+                                isNew={card.isNew}></Styled.cardWrapper>
                         })
                     }
                     {addButton}
@@ -102,7 +105,15 @@ class List extends Component{
     }
 }
 
+const mapDispatchToProps = { 
+    addNewList, 
+    moveCard, 
+    updateList, 
+    addNewCard, 
+    deleteList 
+}
+
 export default compose(
     withStyles(Styles),
-    connect(null, { addNewList, moveCard, updateList, addNewCard })
+    connect(null, mapDispatchToProps)
  )(List);

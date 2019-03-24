@@ -1,6 +1,11 @@
+import { push } from 'react-router-redux';
 import * as AT from '../../actionTypes';
 import userService from '../../../services/user';
 import { setBoards } from '../boards/boards.actions';
+import { setUser } from './user.actions';
+import { userLogin } from '../auth/auth.actions';
+import history from '../../../history';
+
 
 const { USERS } = AT;
 export const usersMiddleware = ({ dispatch, getState }) => (next) => async (action) => {
@@ -15,5 +20,16 @@ export const usersMiddleware = ({ dispatch, getState }) => (next) => async (acti
     }
     break;
 
+    case action.type.includes(`${USERS} ${AT.CREATE_USER}`): {
+      const {firstName, lastName, email, password} = action.payload;
+      const data = await userService.register(firstName, lastName, email, password);
+      if (data && data.user){
+        dispatch(setUser(data.user));
+        dispatch(userLogin(data.token));
+        debugger;
+        history.push('/boards');
+      }
+    }
+    break;
   }
 };

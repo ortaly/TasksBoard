@@ -18,7 +18,8 @@ export const boardsMiddleware = ({ dispatch, getState }) => (next) => async (act
         const boards = getState().boards.boardsList;
         const board = boards.find(board => {
             return board._id === action.payload.boardId;
-        })
+        });
+        //TODO: FIX: do not load the page after url change!
         dispatch(setSelectedBoard(board));
     }
     break;

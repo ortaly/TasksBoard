@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Styled from '../../assets/styled-components';
 import cardServices from '../../services/card';
-import { setCardTitle } from '../../redux/feature/lists/list.actions';
+import { setCardTitle, deleteCard } from '../../redux/feature/lists/list.actions';
 
 class Card extends Component{
 
@@ -24,7 +24,7 @@ class Card extends Component{
       const id = this.state.id;
       if (id) {
         if(newName) {
-          cardServices.updateCard(id, {"title": newName});
+          this.props.setCardTitle(this.props.listId, id, newName);
         } else {
           this.props.deleteCard(id, this.props.listId);
         }
@@ -34,7 +34,6 @@ class Card extends Component{
     updateTitle = (ev) => {
       const newName = ev.target.value
       this.setState({cardTitle: newName});
-      this.props.setCardTitle(this.props.listId, this.props.id, newName);
   }
 
     render() {
@@ -49,4 +48,9 @@ class Card extends Component{
     }
 }
 
-export default connect(null, { setCardTitle })(Card);
+const mapDispatchToProps = { 
+  setCardTitle, 
+  deleteCard 
+}
+
+export default connect(null, mapDispatchToProps)(Card);
