@@ -57,10 +57,10 @@ const createUser = (req, res) => {
         else {
             UsersSchema.create({...user, "password" : hashPass}, (err, user) => {
                 if(err) {
-                    res.send(err);
+                    res.json(err);
                     return;
                 }
-                //res.json(user);
+                res.json(user);
                 createToken(user, res);
                 console.log(" New user: " + JSON.stringify(user));
             })
