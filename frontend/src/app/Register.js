@@ -9,7 +9,6 @@ import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import Styles from '../assets/override-styles';
-import  { Redirect } from 'react-router-dom';
 import { createUser } from '../redux/feature/user/user.actions';
 import { userLogin } from '../redux/feature/auth/auth.actions';
 

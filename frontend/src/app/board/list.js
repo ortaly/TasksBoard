@@ -79,7 +79,7 @@ class List extends Component{
             </Button>;
         }
         return (
-            <div className={this.props.className} onDrop={event => this.onDrop(event)}
+            <div className={this.props.className} onDrop={!isNew ? event => this.onDrop(event): null}
             onDragOver={(event => this.onDragOver(event))}>
                 <Styled.listContent >
                     <Styled.listHeader>

@@ -1,13 +1,18 @@
 import { applyMiddleware, createStore, compose } from 'redux';
 import reducers from './reducers';
+import createHistory from 'history/createHashHistory';
+import { routerMiddleware } from 'react-router-redux';
 import { authMiddleware } from './feature/auth/auth.middleware';
 import { boardsMiddleware } from './feature/boards/boards.middleware';
 import { usersMiddleware } from './feature/user/user.middleware';
 import { boardMiddleware } from './feature/board/board.middleware';
 import { listsMiddleware } from './feature/lists/lists.middleware';
 
+const history = createHistory();
+const routeMiddleware = routerMiddleware(history);
 
-const middlewares = [authMiddleware, 
+const middlewares = [routeMiddleware,
+    authMiddleware, 
     boardsMiddleware, 
     usersMiddleware, 
     boardMiddleware, 
@@ -38,3 +43,5 @@ const configureStore = () => {
 };
 
 export default configureStore;
+
+export { history }

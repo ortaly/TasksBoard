@@ -15,6 +15,7 @@ const userServices = {
     async register(firstName, lastName, email, password) {
         const response = await axios.post('http://localhost:3000/user/create', {"firstName": firstName, "lastName": lastName, "email": email, "password": password});
         return response.data;
+        
     }
 }
 

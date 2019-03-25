@@ -5,8 +5,6 @@ import  { Redirect } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import listServices from '../../services/list';
-import cardServices from '../../services/card';
 import { setLists } from '../../redux/feature/lists/list.actions';
 import { getBoardData } from '../../redux/feature/board/board.actions';
 

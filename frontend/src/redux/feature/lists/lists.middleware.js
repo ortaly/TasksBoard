@@ -45,7 +45,7 @@ export const listsMiddleware = ({ dispatch, getState }) => (next) => async (acti
       cards[cardIndex].title = newName;
       list.cards = cards;
       dispatch(setList(list));
-      cardServices.updateCard(cardId, {listId});
+      cardServices.updateCard(cardId, {title: newName});
     }
     break;
 
@@ -75,7 +75,6 @@ export const listsMiddleware = ({ dispatch, getState }) => (next) => async (acti
     case action.type.includes(`${LISTS} ${AT.DELETE_CARD}`): {
       const { cardId, listId} = action.payload;
 
-      
       const lists = getState().lists;
       const list = Object.assign({}, lists[listId]);
       const listCardsArr = list.cards.slice();

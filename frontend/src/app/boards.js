@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  { Redirect } from 'react-router-dom';
-import { setBoards, setSelectedBoard, createBoard, selectBoard } from '../redux/feature/boards/boards.actions';
+import { createBoard, selectBoard } from '../redux/feature/boards/boards.actions';
 import { getBoards } from '../redux/feature/user/user.actions';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -15,7 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import { compose } from 'recompose';
 import { withStyles } from '@material-ui/core/styles';
 import Styles from '../assets/override-styles';
-import boardService from '../services/board';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -125,8 +124,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    setBoards, 
-    setSelectedBoard, 
     createBoard, 
     getBoards, 
     selectBoard

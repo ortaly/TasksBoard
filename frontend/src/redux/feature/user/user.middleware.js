@@ -4,7 +4,7 @@ import userService from '../../../services/user';
 import { setBoards } from '../boards/boards.actions';
 import { setUser } from './user.actions';
 import { userLogin } from '../auth/auth.actions';
-import history from '../../../history';
+import history from '../../store';
 
 
 const { USERS } = AT;
@@ -26,8 +26,12 @@ export const usersMiddleware = ({ dispatch, getState }) => (next) => async (acti
       if (data && data.user){
         dispatch(setUser(data.user));
         dispatch(userLogin(data.token));
-        debugger;
-        history.push('/boards');
+        history.push('/');
+      } else {
+        if(data && data.errmsg) {
+          alert(data.errmsg);
+          history.push('/');
+        }
       }
     }
     break;
