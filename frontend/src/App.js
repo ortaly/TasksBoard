@@ -1,19 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { BrowserRouter , Route, Switch, withRouter } from 'react-router-dom'
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Login from './app/Login';
 import Boards from './app/boards';
 import Register from './app/Register';
 import Board from './app/board/board';
 import './assets/style.css';
+import { BrowserRouter } from 'react-router-dom';
 
 const App = () => (
-      <div>
-        <Route path="/" exact={true} component={Login} />
+      <Switch>
+        <Route path="/" exact component={Login} />
         <Route path="/boards" component={Boards} /> 
         <Route path="/register" component={Register} /> 
         <Route path="/board/:boardId" component={Board} />
-      </div>
+      </Switch>
 )
 
 App.propTypes = {

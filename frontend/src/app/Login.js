@@ -45,11 +45,11 @@ class Login extends Component {
     render() {
         if (this.state.redirectToBoards) {
             console.log('redirect to boards');
-            return <Redirect to='/boards'/>;
+            return <Redirect to='boards'/>;
         }
 
         if (this.state.redirectToRegister) {
-            return <Redirect to='/register'/>;
+            return <Redirect to='register'/>;
         }
 
         return (
