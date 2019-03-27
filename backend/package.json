@@ -6,6 +6,7 @@
     "dependencies": {
         "bcrypt": "^3.0.4",
         "celebrate": "^9.0.2",
+        "cors": "^2.8.5",
         "dotenv": "^6.2.0",
         "express": "~4.16.4",
         "joi": "^13.4.0",
