@@ -60,7 +60,6 @@ const createUser = (req, res) => {
                     res.json(err);
                     return;
                 }
-                res.json({user});
                 createToken(user, res);
                 console.log(" New user: " + JSON.stringify(user));
             })
