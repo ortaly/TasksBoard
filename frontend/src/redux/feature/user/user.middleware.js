@@ -30,12 +30,12 @@ export const usersMiddleware = ({ dispatch, getState }) => (next) => async (acti
     if (data && data.user) {
       dispatch(setUser(data.user));
       dispatch(userLogin(data.token));
-      document.location = '/boards';
+      dispatch(push('/boards'));
     } else {
       if (data && data.errmsg) {
         if(data.errmsg.includes(`duplicate key`)){
           alert("email exist!");
-          document.location = '/';
+          dispatch(push('/'));
         }
       }
       return;

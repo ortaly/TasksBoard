@@ -1,12 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 import Login from './app/Login';
 import Boards from './app/boards';
 import Register from './app/Register';
 import Board from './app/board/board';
 import './assets/style.css';
-import { BrowserRouter } from 'react-router-dom';
 
 const App = () => (
       <Switch>
@@ -17,8 +15,4 @@ const App = () => (
       </Switch>
 )
 
-App.propTypes = {
-  store: PropTypes.object.isRequired
-}
-
-export default withRouter(App);
+export default App;
