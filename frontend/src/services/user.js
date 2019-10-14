@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const token = localStorage.getItem('userToken');
 const userServices = {
-    async login(email, password) {
-        const response = await axios.post('http://localhost:3000/user/login', {"email": email, "password": password});
+    async login(userLogin) {
+        const response = await axios.post('http://localhost:3000/user/login', userLogin);
         return response.data;
     },
 
