@@ -6,22 +6,29 @@
     "dependencies": {
         "bcrypt": "^3.0.4",
         "celebrate": "^9.0.2",
+        "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
         "dotenv": "^6.2.0",
         "express": "~4.16.4",
+        "express-session": "^1.17.1",
         "joi": "^13.4.0",
         "jsonwebtoken": "^8.4.0",
         "moment": "^2.24.0",
-        "mongoose": "~5.4.7"
+        "mongoose": "~5.4.7",
+        "supertest-session": "^4.0.0"
     },
     "devDependencies": {
         "babel-jest": "^24.3.1",
+        "chai": "^4.2.0",
         "jest": "^24.3.1",
+        "mocha": "^7.2.0",
         "nodemon": "^1.18.9",
-        "supertest": "^4.0.0"
+        "request": "^2.88.2",
+        "superagent": "^5.2.2",
+        "supertest": "^4.0.2"
     },
     "scripts": {
-        "test": "jest --watchAll",
+        "test": "mocha",
         "start": "nodemon app.js"
     },
     "author": "Ortal Yedgar",
