@@ -14,7 +14,7 @@
         "joi": "^13.4.0",
         "jsonwebtoken": "^8.4.0",
         "moment": "^2.24.0",
-        "mongoose": "~5.4.7",
+        "mongoose": "~5.7.5",
         "supertest-session": "^4.0.0"
     },
     "devDependencies": {
