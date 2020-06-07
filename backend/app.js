@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 const mongoose = require('mongoose');
 const cors = require('cors');
 const _ = require('lodash');
@@ -37,3 +37,5 @@ app.use('/', tokenToUserMW, api);
 app.listen(port);
 
 console.log('tasks board RESTful API server started on: ' + port);
+
+module.exports = app;
