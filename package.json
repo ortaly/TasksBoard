@@ -5,7 +5,7 @@
     "dependencies": {},
     "devDependencies": {},
     "scripts": {
-        "backend": "cd backend && npm run start",
+        "backend": "cd backend && npm install && npm run start",
         "frontend": "cd frontend && npm run start",
         "start": "npm run backend & npm run frontend"
     },
