@@ -1,0 +1,14 @@
+{
+    "name": "task-board",
+    "version": "1.0.0",
+    "description": "Create board of tasks",
+    "dependencies": {},
+    "devDependencies": {},
+    "scripts": {
+        "backend": "cd backend && npm run start",
+        "frontend": "cd frontend && npm run start",
+        "start": "npm run backend & npm run frontend"
+    },
+    "author": "Ortal Yedgar",
+    "license": "ISC"
+}
