@@ -4,7 +4,7 @@
     "description": "Create board of tasks",
     "main": "app.js",
     "dependencies": {
-        "bcrypt": "^3.0.4",
+        "bcrypt": "5.0.0",
         "celebrate": "^9.0.2",
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
@@ -14,7 +14,7 @@
         "joi": "^13.4.0",
         "jsonwebtoken": "^8.4.0",
         "moment": "^2.24.0",
-        "mongoose": "~5.4.7",
+        "mongoose": "^5.9.18",
         "supertest-session": "^4.0.0"
     },
     "devDependencies": {
@@ -22,7 +22,7 @@
         "chai": "^4.2.0",
         "jest": "^24.3.1",
         "mocha": "^7.2.0",
-        "nodemon": "^1.18.9",
+        "nodemon": "^2.0.4",
         "request": "^2.88.2",
         "superagent": "^5.2.2",
         "supertest": "^4.0.2"
