@@ -29,7 +29,7 @@
     },
     "scripts": {
         "test": "mocha",
-        "start": "nodemon app.js"
+        "start": "node app.js"
     },
     "author": "Ortal Yedgar",
     "license": "ISC"
