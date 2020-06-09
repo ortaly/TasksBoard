@@ -4,8 +4,11 @@
     "description": "Create board of tasks",
     "dependencies": {},
     "devDependencies": {},
+    "engines": {
+        "node": "12.x"
+    },
     "scripts": {
-        "backend": "cd backend && npm install && npm run start",
+        "backend": "cd backend && npm run start",
         "frontend": "cd frontend && npm run start",
         "start": "npm run backend & npm run frontend"
     },
