@@ -10,7 +10,8 @@
     "scripts": {
         "backend": "cd backend && npm run start",
         "frontend": "cd frontend && npm run start",
-        "start": "npm run backend & npm run frontend"
+        "start": "npm run backend & npm run frontend",
+        "heroku-postbuild": "npm --prefix ./backend install ./backend"
     },
     "author": "Ortal Yedgar",
     "license": "ISC"
