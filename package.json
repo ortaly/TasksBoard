@@ -11,7 +11,7 @@
         "backend": "npm start --prefix backend",
         "frontend": "npm start --prefix frontend",
         "start": "npm run backend & npm run frontend",
-        "heroku-prebuild": "npm --prefix ./backend install"
+        "postinstall": "npm install --prefix ./backend"
     },
     "author": "Ortal Yedgar",
     "license": "ISC"
