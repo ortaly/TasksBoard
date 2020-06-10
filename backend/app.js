@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
+const { DB_HOST } = require('./.env');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const _ = require('lodash');
@@ -12,7 +13,7 @@ const { tokenToUserMW } = require('./middlewares/token.middleware');
   
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DB_HOST, { useNewUrlParser: true });
+mongoose.connect(DB_HOST , { useNewUrlParser: true });
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
