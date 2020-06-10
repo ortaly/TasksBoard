@@ -34,13 +34,13 @@ const enhancer = composeEnhancers(
 const configureStore = () => {
   const _reducers = {...reducers, routing: routerReducer} ;
   const store = createStore(combineReducers(_reducers), enhancer);
-  if (process.env.NODE_ENV !== 'production') {
+  // if (process.env.NODE_ENV !== 'production') {
     if (module.hot) {
       module.hot.accept('./reducers', () => {
         store.replaceReducer(_reducers);
       });
     }
-  }
+  // }
   return store;
 };
 
