@@ -32,11 +32,11 @@ app.use(cors({
 // var routes = require('./api/index'); //importing route
 // routes(app); //register the route
 
-//app.use('/', tokenToUserMW, api);
+app.use('/', tokenToUserMW, api);
 
-app.get('/hello', (req, res) => {
-  res.status(200).json({hello: "hello!"});
-});
+// app.get('/hello', (req, res) => {
+//   res.status(200).json({hello: "hello!"});
+// });
 
 app.listen(port);
 
