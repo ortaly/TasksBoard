@@ -16,7 +16,7 @@
         "moment": "^2.24.0",
         "mongoose": "^5.9.18",
         "supertest-session": "^4.0.0",
-        "lodash": "^4.17.13"
+        "lodash": "^4.17.19"
     },
     "devDependencies": {
         "babel-jest": "^24.3.1",
